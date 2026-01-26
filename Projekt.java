@@ -15,9 +15,41 @@ class Datenhandler
 {}
 
 class Zutat
-{}
+{
+    private String Name;
+    private int Menge;
+    private double[] Nährwerte;
+    private double Preis;
 
-@SuppressWarnings("unused")
+    public Zutat(String neuerName, int neueMenge, double[] neueNährwerte, double neuerPreis)
+    {
+        Name = neuerName;
+        Nährwerte = neueNährwerte;
+        Menge = neueMenge;
+        Preis = neuerPreis;
+    }
+
+    protected String get_Name()
+    {
+        return Name;
+    }
+
+    protected int get_Menge()
+    {
+        return Menge;
+    }
+
+    protected double[] get_Nährwerte()
+    {
+        return Nährwerte;
+    }
+
+    protected double Preis()
+    {
+        return Preis;
+    }
+}
+
 class Rezept
 {
     private String Name;
@@ -27,6 +59,7 @@ class Rezept
     private String Zubereitung;
     private double[] Nährwerte;
     private int Zubereitungszeit;
+    private double Preis;
 
     public Rezept(String NeuerName, String[] NeueSchlagwörter, int NeueBewertung, LinkedList<Zutat> NeueZutaten, String NeueZubereitung, double[] NeueNährwerte, int NeueZubereitungszeit)
     {
@@ -92,6 +125,26 @@ class Rezept
     protected void set_Zutaten(LinkedList<Zutat> neueZutaten)
     {
         Zutaten = neueZutaten;
+    }
+
+    protected void Zutat_Ändern(Zutat NeueZutat,int index)
+    {
+        Zutaten.set(index, NeueZutat);
+    }
+
+    protected void set_Zubereitung(String NeueZubereitung)
+    {
+        Zubereitung = NeueZubereitung;
+    }
+
+    protected void set_Nährwerte(double[] NeueNährwerte)
+    {
+        Nährwerte = NeueNährwerte;
+    }
+
+    protected void set_Zubereitungszeit(int NeueZubereitungszeit)
+    {
+        Zubereitungszeit = NeueZubereitungszeit;
     }
 
     protected void set_All(String NeuerName, String[] NeueSchlagwörter, int NeueBewertung, LinkedList<Zutat> NeueZutaten, String NeueZubereitung, double[] NeueNährwerte, int NeueZubereitungszeit)
