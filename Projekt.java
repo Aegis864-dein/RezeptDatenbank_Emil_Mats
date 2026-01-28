@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import javax.swing.*;
 
 public class Projekt
 {
@@ -9,7 +10,32 @@ public class Projekt
 }
 
 class Manager
-{}
+{
+    Datenhandler Datenhandler = new Datenhandler();
+    MainScreen MainScreen;
+
+    public Manager()
+    {
+        MainScreen = new MainScreen();
+    }
+}
+
+class MainScreen extends JFrame
+{
+    private final JButton TestButton = new JButton("Test"); 
+    public MainScreen()
+    {
+        this.setBounds(0, 0, 1000, 1000);
+        addComponents();
+        this.setVisible(true);
+    }
+
+    private void addComponents()
+    {
+        TestButton.setBounds(20,20,960,100);
+        this.add(TestButton);
+    }
+}
 
 class Datenhandler
 {}
@@ -44,9 +70,37 @@ class Zutat
         return Nährwerte;
     }
 
-    protected double Preis()
+    protected double get_Preis()
     {
         return Preis;
+    }
+
+    protected void set_Name(String neuerName)
+    {
+        Name = neuerName;
+    }
+
+    protected void set_Menge(int neueMenge)
+    {
+        Menge = neueMenge;
+    }
+
+    protected void set_Nährwerte(double[] neueNährwerte)
+    {
+        Nährwerte = neueNährwerte;
+    }
+
+    protected void set_Preis(double neuerPreis)
+    {
+        Preis = neuerPreis;
+    }
+
+    public void set_All(String neuerName, int neueMenge, double[] neueNährwerte, double neuerPreis)
+    {
+        Name = neuerName;
+        Nährwerte = neueNährwerte;
+        Menge = neueMenge;
+        Preis = neuerPreis;
     }
 }
 
@@ -61,15 +115,16 @@ class Rezept
     private int Zubereitungszeit;
     private double Preis;
 
-    public Rezept(String NeuerName, String[] NeueSchlagwörter, int NeueBewertung, LinkedList<Zutat> NeueZutaten, String NeueZubereitung, double[] NeueNährwerte, int NeueZubereitungszeit)
+    public Rezept(String NeuerName, String[] NeueSchlagwörter, int NeueBewertung, LinkedList<Zutat> NeueZutaten, String NeueZubereitung, int NeueZubereitungszeit)
     {
        Name = NeuerName;
        Schlagwörter = NeueSchlagwörter;
        Bewertung = NeueBewertung;
        Zutaten = NeueZutaten;
        Zubereitung = NeueZubereitung;
-       Nährwerte = NeueNährwerte;
        Zubereitungszeit = NeueZubereitungszeit;
+       readNährwerte();
+       readPreis();
     }
 
     protected String get_Name()
@@ -97,14 +152,42 @@ class Rezept
         return Zubereitung;
     }
 
+    private void readNährwerte()
+    {
+        double[] tempNährwerte;
+        for(int i = 0; i < Zutaten.size(); i++)
+        {
+            tempNährwerte = Zutaten.get(i).get_Nährwerte();
+            for(int j = 0; j < 4; j++)
+            {
+                Nährwerte[j] += tempNährwerte[j];
+            }
+        }
+    }
+
     protected double[] get_Nährwerte()
     {
+        readNährwerte();
         return Nährwerte;
     }
 
     protected int get_Zubereitungszeit()
     {
         return Zubereitungszeit;
+    }
+
+    private void readPreis()
+    {
+        for(int i = 0; i < Zutaten.size(); i++)
+        {
+            Preis += Zutaten.get(i).get_Preis();
+        }
+    }
+
+    protected double get_Preis()
+    {
+        readPreis();
+        return Preis;
     }
 
     protected void set_Name(String neuerName)
@@ -137,24 +220,20 @@ class Rezept
         Zubereitung = NeueZubereitung;
     }
 
-    protected void set_Nährwerte(double[] NeueNährwerte)
-    {
-        Nährwerte = NeueNährwerte;
-    }
-
     protected void set_Zubereitungszeit(int NeueZubereitungszeit)
     {
         Zubereitungszeit = NeueZubereitungszeit;
     }
 
-    protected void set_All(String NeuerName, String[] NeueSchlagwörter, int NeueBewertung, LinkedList<Zutat> NeueZutaten, String NeueZubereitung, double[] NeueNährwerte, int NeueZubereitungszeit)
+    protected void set_All(String NeuerName, String[] NeueSchlagwörter, int NeueBewertung, LinkedList<Zutat> NeueZutaten, String NeueZubereitung, int NeueZubereitungszeit)
     {
        Name = NeuerName;
        Schlagwörter = NeueSchlagwörter;
        Bewertung = NeueBewertung;
        Zutaten = NeueZutaten;
        Zubereitung = NeueZubereitung;
-       Nährwerte = NeueNährwerte;
        Zubereitungszeit = NeueZubereitungszeit;
+       readNährwerte();
+       readPreis();
     }
 }
