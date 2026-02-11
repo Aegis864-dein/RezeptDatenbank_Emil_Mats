@@ -1,5 +1,7 @@
+import java.awt.LayoutManager;
 import java.util.LinkedList;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 public class Projekt
 {
@@ -22,18 +24,41 @@ class Manager
 
 class MainScreen extends JFrame
 {
-    private final JButton TestButton = new JButton("Test"); 
+  JTable RezepteTable;
+  JPanel panel = new JPanel(); 
     public MainScreen()
     {
-        this.setBounds(0, 0, 1000, 1000);
+        setLayout(null);
+        setBounds(0, 0, 1000, 1000);
         addComponents();
-        this.setVisible(true);
+        setVisible(true);
     }
 
     private void addComponents()
     {
-        TestButton.setBounds(20,20,960,100);
-        this.add(TestButton);
+        panel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                "ODI Rankings",
+                TitledBorder.CENTER,
+                TitledBorder.TOP));
+
+        String[] ColumnNames = {"Name", "Schlagwörter", "Bewertung","Zutaten", "Zubereitungszeit", "Preis"};
+
+        String[][] TestData = {
+                {"Test","Test","Test","Test","Test","Test"},
+                {"Test","Test","Test","Test","Test","Test"},
+                {"Test","Test","Test","Test","Test","Test"},
+                {"Test","Test","Test","Test","Test","Test"},
+                {"Test","Test","Test","Test","Test","Test"}
+        };
+
+        RezepteTable = new JTable(TestData, ColumnNames);
+
+        panel.setLayout((LayoutManager) new BorderLayout()); // WICHTIG!
+        panel.add(new JScrollPane(RezepteTable), BorderLayout.CENTER);
+
+        panel.setBounds(100, 100, 600, 400); // größer machen!
+        add(panel);
     }
 }
 
