@@ -1,9 +1,13 @@
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
+import java.util.Arrays;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class Projekt
 {
@@ -13,40 +17,53 @@ public class Projekt
     }
 }
 
-
-class BorderLayout {
-    public static final Object PAGE_START = null;
-    public static final Object CENTER = null;
-}
-
-
 class Manager
 {
     Datenhandler Datenhandler = new Datenhandler();
     MainScreen MainScreen;
+    LinkedList<Rezept> Rezepte = new LinkedList<>();
 
     public Manager()
     {
         MainScreen = new MainScreen();
+        // Beispieldaten erstellen und Tabelle füllen
+        LinkedList<Zutat> z1 = new LinkedList<>();
+        z1.add(new Zutat("Mehl", 500, new double[]{200,10,5,2}, 1.20));
+        z1.add(new Zutat("Milch", 250, new double[]{80,4,3,1}, 0.80));
+        Rezept r1 = new Rezept("Pfannkuchen", new String[]{"Frühstück","Süß"}, 5, z1, "Alles mischen und braten", 20);
+        LinkedList<Zutat> z2 = new LinkedList<>();
+        z2.add(new Zutat("Tomate", 200, new double[]{18,1,0.2,0.1}, 0.60));
+        z2.add(new Zutat("Nudeln", 200, new double[]{350,12,5,2}, 0.90));
+        Rezept r2 = new Rezept("Tomatensauce mit Nudeln", new String[]{"Abendessen","Vegetarisch"}, 4, z2, "Kochen und mischen", 30);
+        Rezepte.add(r1);
+        Rezepte.add(r2);
+        MainScreen.setRezepte(Rezepte);
     }
 }
 
 class MainScreen extends JFrame implements ActionListener
 {
-  JTable RezepteTable;
-  JScrollPane panel;
-  JButton NamenButton = new JButton("Name");
-  JButton SchlagwörterButton = new JButton("Schlagwörter");
-  JButton BewertungButton = new JButton("Bewertung");
-  JButton ZutatenButton = new JButton("Zutaten");
-  JButton ZubereitungButton = new JButton("Zubereitung");
-  JButton NährwerteButton = new JButton("Nährwerte");
-  JButton ZubereitungszeitButton = new JButton("Zeit");
-  JButton PreisButton = new JButton("Preis");
+    JTable RezepteTable;
+    JScrollPane panel;
+    JButton NamenButton = new JButton("Name");
+    JButton SchlagwörterButton = new JButton("Schlagwörter");
+    JButton BewertungButton = new JButton("Bewertung");
+    JButton ZutatenButton = new JButton("Zutaten");
+    JButton ZubereitungButton = new JButton("Zubereitung");
+    JButton NährwerteButton = new JButton("Nährwerte");
+    JButton ZubereitungszeitButton = new JButton("Zeit");
+    JButton PreisButton = new JButton("Preis");
+    JTextField NameSuchFeld = new JTextField();
+    JTextField SchlagwörterSuchFeld = new JTextField();
+    JButton AuswählenKnopf = new JButton("Rezept auswählen");
+    JButton HinzufügenKnopf = new JButton("Rezept hinzufügen");
+    JButton EntfernenKnopf = new JButton("Rezept entfernen");
+    JButton ÄndernKnopf = new JButton("Rezept ändern");
+    LinkedList<Rezept> RezepteKopie = new LinkedList<>();
     public MainScreen()
     {
         setLayout(null);
-        setBounds(0, 0, 1000, 1000);
+        setBounds(0, 0, 1050, 1000);
         addComponents();
         setVisible(true);
     }
@@ -55,28 +72,123 @@ class MainScreen extends JFrame implements ActionListener
     {
 
         String[] ColumnNames = {"", "", "", "", "", "", "", ""};
-
-        String[][] TestData = {
-            {"Test","Test","Test","Test","Test","Test","Test","Test"}};
+        String[][] TestData = {{"","","","","","","",""}};
         RezepteTable = new JTable(TestData, ColumnNames);
         panel = new JScrollPane(RezepteTable);
-        panel.setBounds(0, 400, 1000, 600);
+        panel.setBounds(20, 200, 1000, 600);
         add(panel);
 
-        NamenButton.setBounds(0, 380, 125, 20);
+        NamenButton.setBounds(20, 180, 125, 20);
         NamenButton.addActionListener(this);
         add(NamenButton);
+
+        NameSuchFeld.setBounds(20, 160, 125, 20);
+        NameSuchFeld.addActionListener(this);
+        add(NameSuchFeld);
+
+        SchlagwörterButton.setBounds(145, 180, 125, 20);
+        SchlagwörterButton.addActionListener(this);
+        add(SchlagwörterButton);
+
+        SchlagwörterSuchFeld.setBounds(145, 160, 125, 20);
+        SchlagwörterSuchFeld.addActionListener(this);
+        add(SchlagwörterSuchFeld);
+
+        BewertungButton.setBounds(270, 180, 125, 20);
+        BewertungButton.addActionListener(this);
+        add(BewertungButton);
+
+        ZutatenButton.setBounds(395, 180, 125, 20);
+        ZutatenButton.addActionListener(this);
+        add(ZutatenButton);
+
+        ZubereitungButton.setBounds(520, 180, 125, 20);
+        ZubereitungButton.addActionListener(this);
+        add(ZubereitungButton);
+
+        NährwerteButton.setBounds(645, 180, 125, 20);
+        NährwerteButton.addActionListener(this);
+        add(NährwerteButton);
+
+        ZubereitungszeitButton.setBounds(770, 180, 125, 20);
+        ZubereitungszeitButton.addActionListener(this);
+        add(ZubereitungszeitButton);
+
+        PreisButton.setBounds(895, 180, 125, 20);
+        PreisButton.addActionListener(this);
+        add(PreisButton);
+
+        AuswählenKnopf.setBounds(20, 100, 250, 40);
+        AuswählenKnopf.addActionListener(this);
+        add(AuswählenKnopf);
+
+        HinzufügenKnopf.setBounds(270, 100, 250, 40);
+        HinzufügenKnopf.addActionListener(this);
+        add(HinzufügenKnopf);
+
+        EntfernenKnopf.setBounds(520, 100, 250, 40);
+        EntfernenKnopf.addActionListener(this);
+        add(EntfernenKnopf);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        //kommt noch :)
+        if(e.getSource() == AuswählenKnopf)
+        {
+            AuswählenScreen WAAAAAA = new AuswählenScreen();
+        }
+    }
+
+    public void setRezepte(LinkedList<Rezept> rezepte)
+    {
+        if(rezepte == null) return;
+        RezepteKopie = rezepte;
+        String[] ColumnNames = {"", "", "", "", "", "", "", ""};
+        String[][] data = new String[rezepte.size()][8];
+        for(int i = 0; i < rezepte.size(); i++)
+        {
+            Rezept r = rezepte.get(i);
+            data[i][0] = r.get_Name();
+            String[] tags = r.get_Schlagwörter();
+            data[i][1] = (tags == null) ? "" : String.join(", ", tags);
+            data[i][2] = String.valueOf(r.get_Bewertung());
+            LinkedList<Zutat> zs = r.get_Zutaten();
+            if(zs != null)
+            {
+                StringBuilder sb = new StringBuilder();
+                for(int j = 0; j < zs.size(); j++)
+                {
+                    if(j>0) sb.append(", ");
+                    sb.append(zs.get(j).get_Name()).append("(").append(zs.get(j).get_Menge()).append(")");
+                }
+                data[i][3] = sb.toString();
+            } else data[i][3] = "";
+            data[i][4] = r.get_Zubereitung();
+            double[] n = r.get_Nährwerte();
+            data[i][5] = (n == null) ? "" : Arrays.toString(n);
+            data[i][6] = String.valueOf(r.get_Zubereitungszeit());
+            data[i][7] = String.format("%.2f", r.get_Preis());
+        }
+        RezepteTable.setModel(new DefaultTableModel(data, ColumnNames));
+    }
+}
+
+class AuswählenScreen extends JFrame
+{
+    public AuswählenScreen()
+    {
+        setLayout(null);
+        setBounds(20, 200, 1000, 600);
+        setVisible(true);
     }
 }
 
 class Datenhandler
-{}
+{
+
+}
 
 class Zutat
 {
@@ -192,10 +304,12 @@ class Rezept
 
     private void readNährwerte()
     {
+        Nährwerte = new double[4];
         double[] tempNährwerte;
         for(int i = 0; i < Zutaten.size(); i++)
         {
             tempNährwerte = Zutaten.get(i).get_Nährwerte();
+            if(tempNährwerte == null) continue;
             for(int j = 0; j < 4; j++)
             {
                 Nährwerte[j] += tempNährwerte[j];
@@ -216,6 +330,7 @@ class Rezept
 
     private void readPreis()
     {
+        Preis = 0.0;
         for(int i = 0; i < Zutaten.size(); i++)
         {
             Preis += Zutaten.get(i).get_Preis();
