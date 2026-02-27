@@ -1,3 +1,4 @@
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ class Manager
         LinkedList<Zutat> z2 = new LinkedList<>();
         z2.add(new Zutat("Tomate", 200, new double[]{18,1,0.2,0.1}, 0.60));
         z2.add(new Zutat("Nudeln", 200, new double[]{350,12,5,2}, 0.90));
-        Rezept r2 = new Rezept("Tomatensauce mit Nudeln", new String[]{"Abendessen","Vegetarisch"}, 4, z2, "Kochen und mischen", 30);
+        Rezept r2 = new Rezept("Nudeln mit Tomatensoße", new String[]{"Abendessen","Vegetarisch"}, 4, z2, "Kochen und mischen", 30);
         Rezepte.add(r1);
         Rezepte.add(r2);
         MainScreen.setRezepte(Rezepte);
@@ -74,6 +75,7 @@ class MainScreen extends JFrame implements ActionListener
         String[] ColumnNames = {"", "", "", "", "", "", "", ""};
         String[][] TestData = {{"","","","","","","",""}};
         RezepteTable = new JTable(TestData, ColumnNames);
+        RezepteTable.setCellEditor(null);
         panel = new JScrollPane(RezepteTable);
         panel.setBounds(20, 200, 1000, 600);
         add(panel);
@@ -137,7 +139,8 @@ class MainScreen extends JFrame implements ActionListener
     {
         if(e.getSource() == AuswählenKnopf)
         {
-            AuswählenScreen WAAAAAA = new AuswählenScreen();
+            int i = RezepteTable.getSelectedRow();
+            AuswählenScreen WAAAAAA = new AuswählenScreen(RezepteKopie.get(i));
         }
     }
 
@@ -176,12 +179,36 @@ class MainScreen extends JFrame implements ActionListener
 }
 
 class AuswählenScreen extends JFrame
-{
-    public AuswählenScreen()
+{ 
+    Rezept Rezept;
+    JTextField NamenFeld = new JTextField();
+    JTextField SchlagwörterFeld = new JTextField();
+    JTextField BewertungFeld = new JTextField();
+    public AuswählenScreen(Rezept neuRezept)
     {
+        Rezept = neuRezept;
         setLayout(null);
         setBounds(20, 200, 1000, 600);
         setVisible(true);
+        addComponents();
+    }
+
+    public void addComponents()
+    {
+        NamenFeld.setBounds(20, 20, 200, 25);
+        NamenFeld.setText(Rezept.get_Name());
+        NamenFeld.setEditable(false);
+        add(NamenFeld);
+
+        SchlagwörterFeld.setBounds(225, 20, 200, 25);
+        SchlagwörterFeld.setText(String.join(", ", Rezept.get_Schlagwörter()));
+        SchlagwörterFeld.setEditable(false);
+        add(SchlagwörterFeld);
+
+        BewertungFeld.setBounds(430, 20, 25, 25);
+        BewertungFeld.setText(String.valueOf(Rezept.get_Bewertung()));
+        BewertungFeld.setEditable(false);
+        add(BewertungFeld);
     }
 }
 
