@@ -77,60 +77,64 @@ class MainScreen extends JFrame implements ActionListener
         RezepteTable = new JTable(TestData, ColumnNames);
         RezepteTable.setCellEditor(null);
         panel = new JScrollPane(RezepteTable);
-        panel.setBounds(20, 200, 1000, 600);
+        panel.setBounds(20, 120, 1000, 800);
         add(panel);
 
-        NamenButton.setBounds(20, 180, 125, 20);
+        NamenButton.setBounds(20, 100, 125, 20);
         NamenButton.addActionListener(this);
         add(NamenButton);
 
-        NameSuchFeld.setBounds(20, 160, 125, 20);
+        NameSuchFeld.setBounds(20, 80, 125, 20);
         NameSuchFeld.addActionListener(this);
         add(NameSuchFeld);
 
-        SchlagwörterButton.setBounds(145, 180, 125, 20);
+        SchlagwörterButton.setBounds(145, 100, 125, 20);
         SchlagwörterButton.addActionListener(this);
         add(SchlagwörterButton);
 
-        SchlagwörterSuchFeld.setBounds(145, 160, 125, 20);
+        SchlagwörterSuchFeld.setBounds(145, 80, 125, 20);
         SchlagwörterSuchFeld.addActionListener(this);
         add(SchlagwörterSuchFeld);
 
-        BewertungButton.setBounds(270, 180, 125, 20);
+        BewertungButton.setBounds(270, 100, 125, 20);
         BewertungButton.addActionListener(this);
         add(BewertungButton);
 
-        ZutatenButton.setBounds(395, 180, 125, 20);
+        ZutatenButton.setBounds(395, 100, 125, 20);
         ZutatenButton.addActionListener(this);
         add(ZutatenButton);
 
-        ZubereitungButton.setBounds(520, 180, 125, 20);
+        ZubereitungButton.setBounds(520, 100, 125, 20);
         ZubereitungButton.addActionListener(this);
         add(ZubereitungButton);
 
-        NährwerteButton.setBounds(645, 180, 125, 20);
+        NährwerteButton.setBounds(645, 100, 125, 20);
         NährwerteButton.addActionListener(this);
         add(NährwerteButton);
 
-        ZubereitungszeitButton.setBounds(770, 180, 125, 20);
+        ZubereitungszeitButton.setBounds(770, 100, 125, 20);
         ZubereitungszeitButton.addActionListener(this);
         add(ZubereitungszeitButton);
 
-        PreisButton.setBounds(895, 180, 125, 20);
+        PreisButton.setBounds(895, 100, 125, 20);
         PreisButton.addActionListener(this);
         add(PreisButton);
 
-        AuswählenKnopf.setBounds(20, 100, 250, 40);
+        AuswählenKnopf.setBounds(20, 20, 250, 40);
         AuswählenKnopf.addActionListener(this);
         add(AuswählenKnopf);
 
-        HinzufügenKnopf.setBounds(270, 100, 250, 40);
+        HinzufügenKnopf.setBounds(270, 20, 250, 40);
         HinzufügenKnopf.addActionListener(this);
         add(HinzufügenKnopf);
 
-        EntfernenKnopf.setBounds(520, 100, 250, 40);
+        EntfernenKnopf.setBounds(520, 20, 250, 40);
         EntfernenKnopf.addActionListener(this);
         add(EntfernenKnopf);
+
+        ÄndernKnopf.setBounds(770, 20, 250, 40);
+        ÄndernKnopf.addActionListener(this);
+        add(ÄndernKnopf);
     }
 
     @SuppressWarnings("unused")
@@ -140,6 +144,7 @@ class MainScreen extends JFrame implements ActionListener
         if(e.getSource() == AuswählenKnopf)
         {
             int i = RezepteTable.getSelectedRow();
+            if(i < 0) return;
             AuswählenScreen WAAAAAA = new AuswählenScreen(RezepteKopie.get(i));
         }
     }
@@ -154,17 +159,17 @@ class MainScreen extends JFrame implements ActionListener
         {
             Rezept r = rezepte.get(i);
             data[i][0] = r.get_Name();
-            String[] tags = r.get_Schlagwörter();
-            data[i][1] = (tags == null) ? "" : String.join(", ", tags);
+            String[] Schlagwörter = r.get_Schlagwörter();
+            data[i][1] = (Schlagwörter == null) ? "" : String.join(", ", Schlagwörter);
             data[i][2] = String.valueOf(r.get_Bewertung());
-            LinkedList<Zutat> zs = r.get_Zutaten();
-            if(zs != null)
+            LinkedList<Zutat> Zutaten = r.get_Zutaten();
+            if(Zutaten != null)
             {
                 StringBuilder sb = new StringBuilder();
-                for(int j = 0; j < zs.size(); j++)
+                for(int j = 0; j < Zutaten.size(); j++)
                 {
                     if(j>0) sb.append(", ");
-                    sb.append(zs.get(j).get_Name()).append("(").append(zs.get(j).get_Menge()).append(")");
+                    sb.append(Zutaten.get(j).get_Name()).append("(").append(Zutaten.get(j).get_Menge()).append(")");
                 }
                 data[i][3] = sb.toString();
             } else data[i][3] = "";
@@ -184,6 +189,10 @@ class AuswählenScreen extends JFrame
     JTextField NamenFeld = new JTextField();
     JTextField SchlagwörterFeld = new JTextField();
     JTextField BewertungFeld = new JTextField();
+    JTextField NährwerteFeld = new JTextField();
+    JTextField ZeitFeld = new JTextField();
+    JTextField PreisFeld = new JTextField();
+    JTextField ZutatenFeld = new JTextField();
     public AuswählenScreen(Rezept neuRezept)
     {
         Rezept = neuRezept;
@@ -200,15 +209,54 @@ class AuswählenScreen extends JFrame
         NamenFeld.setEditable(false);
         add(NamenFeld);
 
-        SchlagwörterFeld.setBounds(225, 20, 200, 25);
+        SchlagwörterFeld.setBounds(225, 20, 300, 25);
         SchlagwörterFeld.setText(String.join(", ", Rezept.get_Schlagwörter()));
         SchlagwörterFeld.setEditable(false);
         add(SchlagwörterFeld);
 
-        BewertungFeld.setBounds(430, 20, 25, 25);
+        BewertungFeld.setBounds(530, 20, 25, 25);
         BewertungFeld.setText(String.valueOf(Rezept.get_Bewertung()));
         BewertungFeld.setEditable(false);
         add(BewertungFeld);
+
+        NährwerteFeld.setBounds(560, 20, 125, 25);
+        double[] Temp = Rezept.get_Nährwerte();
+        String[] Nährwerte = new String[Temp.length];
+        for(int i = 0; i < Temp.length; i++)
+        {
+            Nährwerte[i] = String.valueOf(Temp[i]);
+        }
+        NährwerteFeld.setText(String.join(",", Nährwerte));
+        NährwerteFeld.setEditable(false);
+        add(NährwerteFeld);
+
+        ZeitFeld.setBounds(690, 20, 50, 25);
+        ZeitFeld.setText(String.valueOf(Rezept.get_Zubereitungszeit()));
+        ZeitFeld.setEditable(false);
+        add(ZeitFeld);
+
+        PreisFeld.setBounds(745, 20, 50, 25);
+        PreisFeld.setText(String.valueOf(Rezept.get_Preis()));
+        PreisFeld.setEditable(false);
+        add(PreisFeld);
+
+        ZutatenFeld.setBounds(530, 50, 265, 400);
+        ZutatenFeld.setText(BuildZutatenString());
+        ZutatenFeld.setEditable(false);
+        add(ZutatenFeld);
+    }
+    
+    public String BuildZutatenString()
+    {
+        LinkedList<Zutat> Zutaten = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        for(int j = 0; j < Zutaten.size(); j++)
+        {
+            if(j>0) sb.append(", ");
+            sb.append(Zutaten.get(j).get_Name()).append("(").append(Zutaten.get(j).get_Menge()).append(")");
+        }
+        System.out.println(sb.toString());
+        return sb.toString();       
     }
 }
 
