@@ -1,4 +1,5 @@
 import java.awt.Panel;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -147,6 +148,11 @@ class MainScreen extends JFrame implements ActionListener
             if(i < 0) return;
             AuswählenScreen WAAAAAA = new AuswählenScreen(RezepteKopie.get(i));
         }
+
+        if(e.getSource() == HinzufügenKnopf)
+        {
+            hinzufügenScreen WAAAAAAAA = new hinzufügenScreen();
+        }
     }
 
     public void setRezepte(LinkedList<Rezept> rezepte)
@@ -192,7 +198,9 @@ class AuswählenScreen extends JFrame
     JTextField NährwerteFeld = new JTextField();
     JTextField ZeitFeld = new JTextField();
     JTextField PreisFeld = new JTextField();
-    JTextField ZutatenFeld = new JTextField();
+    JTable ZutatenFeld;
+    JTextField ZubereitungsFeld = new JTextField();
+    JScrollPane Panel;
     public AuswählenScreen(Rezept neuRezept)
     {
         Rezept = neuRezept;
@@ -240,26 +248,97 @@ class AuswählenScreen extends JFrame
         PreisFeld.setEditable(false);
         add(PreisFeld);
 
-        ZutatenFeld.setBounds(530, 50, 265, 400);
-        ZutatenFeld.setText(BuildZutatenString());
-        ZutatenFeld.setEditable(false);
-        add(ZutatenFeld);
+        String[] CollumNames = {"Name","Menge","Preis"};
+        ZutatenFeld = new JTable(BuildZutatenString(Rezept.get_Zutaten()),CollumNames);
+        Panel = new JScrollPane(ZutatenFeld);
+        Panel.setBounds(530,50,265,400);
+        add(Panel);
+
+        ZubereitungsFeld.setBounds(20, 50, 505, 400);
+        ZubereitungsFeld.setText(Rezept.get_Zubereitung());
+        ZubereitungsFeld.setEditable(false);
+        add(ZubereitungsFeld);
     }
-    
-    public String BuildZutatenString()
+
+
+    public String[][] BuildZutatenString(LinkedList<Zutat> Zutaten)
     {
-        LinkedList<Zutat> Zutaten = new LinkedList<>();
-        StringBuilder sb = new StringBuilder();
-        for(int j = 0; j < Zutaten.size(); j++)
+        String[][] ZutatenString = new String[Zutaten.size()+1][3];
+        for(int i = 0; i < Zutaten.size(); i++)
         {
-            if(j>0) sb.append(", ");
-            sb.append(Zutaten.get(j).get_Name()).append("(").append(Zutaten.get(j).get_Menge()).append(")");
+            ZutatenString[i][0] = Zutaten.get(i).get_Name();
+            ZutatenString[i][1] = String.valueOf(Zutaten.get(i).get_Menge());
+            ZutatenString[i][2] = String.valueOf(Zutaten.get(i).get_Preis());
         }
-        System.out.println(sb.toString());
-        return sb.toString();       
+        return ZutatenString;      
     }
 }
 
+class hinzufügenScreen extends JFrame
+{
+    Rezept Rezept;
+    JTextField NamenFeld = new JTextField();
+    JTextField SchlagwörterFeld = new JTextField();
+    JTextField BewertungFeld = new JTextField();
+    JTextField NährwerteFeld = new JTextField();
+    JTextField ZeitFeld = new JTextField();
+    JTextField PreisFeld = new JTextField();
+    JTable ZutatenFeld;
+    JTextField ZubereitungsFeld = new JTextField();
+    JScrollPane Panel;
+    public hinzufügenScreen()
+    {
+        setLayout(null);
+        setBounds(20, 200, 1000, 600);
+        setVisible(true);
+        addComponents();
+    }
+
+    public void addComponents()
+    {
+        NamenFeld.setBounds(20, 20, 200, 25);
+        add(NamenFeld);
+
+        SchlagwörterFeld.setBounds(225, 20, 300, 25);
+        add(SchlagwörterFeld);
+
+        BewertungFeld.setBounds(530, 20, 25, 25);
+        add(BewertungFeld);
+
+        NährwerteFeld.setBounds(560, 20, 125, 25);
+        NährwerteFeld.setEditable(false);
+        add(NährwerteFeld);
+
+        ZeitFeld.setBounds(690, 20, 50, 25);
+        add(ZeitFeld);
+
+        PreisFeld.setBounds(745, 20, 50, 25);
+        add(PreisFeld);
+
+        String[] CollumNames = {"Name","Menge","Preis"};
+        ZutatenFeld = new JTable(BuildemptyString(),CollumNames);
+        Panel = new JScrollPane(ZutatenFeld);
+        Panel.setBounds(530,50,265,400);
+        add(Panel);
+
+        ZubereitungsFeld.setBounds(20, 50, 505, 400);
+        add(ZubereitungsFeld);
+    }
+
+    public String[][] BuildemptyString()
+    {
+        String[][] emptyString = new String[30][4];
+        for(int i = 0; i < 30; i++)
+        {
+            emptyString[i][0] = "";
+            emptyString[i][1] = "";
+            emptyString[i][2] = "";
+            emptyString[i][3] = "";
+        }
+        return emptyString;
+    }
+}
+    
 class Datenhandler
 {
 
