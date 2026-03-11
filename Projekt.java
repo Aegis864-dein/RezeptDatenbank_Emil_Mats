@@ -30,8 +30,8 @@ class Manager
         MainScreen = new MainScreen();
         // Beispieldaten erstellen und Tabelle füllen
         LinkedList<Zutat> z1 = new LinkedList<>();
-        z1.add(new Zutat("Mehl", 500, new double[]{200,10,5,2}, 1.20));
-        z1.add(new Zutat("Milch", 250, new double[]{80,4,3,1}, 0.80));
+        z1.add(new Zutat("Milch", 500, new double[]{200,10,5,2}, 1.20));
+        z1.add(new Zutat("Mehl", 250, new double[]{80,4,3,1}, 0.80));
         Rezept r1 = new Rezept("Pfannkuchen", new String[]{"Frühstück","Süß"}, 5, z1, "Alles mischen und braten", 20);
         LinkedList<Zutat> z2 = new LinkedList<>();
         z2.add(new Zutat("Tomate", 200, new double[]{18,1,0.2,0.1}, 0.60));
